@@ -13,7 +13,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id   String @id @default(uuid())
-  name String
+model AcademicSemester {
+  id         String    @id @default(uuid())
+  title      String
+  year       Int
+  code       String
+  startMonth String
+  endMonth   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  students   Student[]
+
+  @@map("academic_semesters")
+}
+
+model AcademicFaculty {
+  id                  String               @id @default(uuid())
+  title               String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  academicDepertments AcademicDepertment[]
+  students            Student[]
+  faculties           Faculty[]
+
+  @@map("academic_faculties")
+}
+
+model AcademicDepertment {
+  id                String          @id @default(uuid())
+  title             String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  academicFacultyId String
+  academicFaculty   AcademicFaculty @relation(fields: [academicFacultyId], references: [id])
+  students          Student[]
+  faculties         Faculty[]
+
+  @@map("academic_depertments")
+}
+
+// Role Student
+model Student {
+  id                   String   @id @default(uuid())
+  studentId            String
+  firstName            String
+  middleName           String
+  lastName             String
+  profileImage         String
+  email                String
+  contactNo            String
+  gender               String
+  bloodGroup           String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  academicSemesterId   String
+  academicFacultyId    String
+  academicDepertmentId String
+
+  // Relations
+  academicSemester   AcademicSemester   @relation(fields: [academicSemesterId], references: [id])
+  academicFaculty    AcademicFaculty    @relation(fields: [academicFacultyId], references: [id])
+  academicDepertment AcademicDepertment @relation(fields: [academicDepertmentId], references: [id])
+
+  @@map("students")
+}
+
+// Role Faculty
+model Faculty {
+  id                    String   @id @default(uuid())
+  facultyId             String
+  firstName             String
+  middleName            String
+  lastName              String
+  profileImage          String
+  email                 String
+  contactNo             String
+  gender                String
+  bloodGroup            String
+  designation           String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  academicFacultyId     String
+  academicDepaertmentId String
+
+  // Relations
+  academicFaculty    AcademicFaculty    @relation(fields: [academicFacultyId], references: [id])
+  academicDepertment AcademicDepertment @relation(fields: [academicDepaertmentId], references: [id])
+
+  @@map("faculties")
 }

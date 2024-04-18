@@ -16,7 +16,7 @@ const myFormat = printf(({ level, message, label, timestamp }) => {
 
 const logger = createLogger({
   level: 'info',
-  format: combine(label({ label: 'PH' }), timestamp(), myFormat),
+  format: combine(label({ label: 'SAST' }), timestamp(), myFormat),
   transports: [
     new transports.Console(),
     new DailyRotateFile({
@@ -24,8 +24,8 @@ const logger = createLogger({
         process.cwd(),
         'logs',
         'winston',
-        'successes',
-        'phu-%DATE%-success.log'
+        'success',
+        'sas-%DATE%-success.log'
       ),
       datePattern: 'YYYY-DD-MM-HH',
       zippedArchive: true,
@@ -37,7 +37,7 @@ const logger = createLogger({
 
 const errorlogger = createLogger({
   level: 'error',
-  format: combine(label({ label: 'PH' }), timestamp(), myFormat),
+  format: combine(label({ label: 'ES' }), timestamp(), myFormat),
   transports: [
     new transports.Console(),
     new DailyRotateFile({
@@ -46,7 +46,7 @@ const errorlogger = createLogger({
         'logs',
         'winston',
         'errors',
-        'phu-%DATE%-error.log'
+        'esa-%DATE%-error.log'
       ),
       datePattern: 'YYYY-DD-MM-HH',
       zippedArchive: true,
@@ -56,4 +56,4 @@ const errorlogger = createLogger({
   ],
 });
 
-export { logger, errorlogger };
+export { errorlogger, logger };
