@@ -18,12 +18,12 @@ const create = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const readAll = catchAsync(async (req: Request, res: Response) => {
+const readMultiple = catchAsync(async (req: Request, res: Response) => {
   const filters = pick({ ...req.query }, academicSemesterFilterableFields);
   const pgOptions = pick({ ...req.query }, paginationFields);
   // console.log('filters: ', filters);
   // console.log('Pagination Options: ', pgOptions);
-  const result = await AcademicSemesterService.readAll(filters, pgOptions);
+  const result = await AcademicSemesterService.readMultiple(filters, pgOptions);
   sendResponse<AcademicSemester[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -33,4 +33,15 @@ const readAll = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const AcademicSemesterController = { create, readAll };
+const readSingle = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AcademicSemesterService.readSingle(id);
+  sendResponse<AcademicSemester>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Single academic semester retrieve success!!',
+    data: result,
+  });
+});
+
+export const AcademicSemesterController = { create, readMultiple, readSingle };

@@ -3,7 +3,7 @@ import { AcademicSemester, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import prisma from '../../prisma/prisma';
+import prisma from '../../../shared/prisma';
 import { academicSemesterSearchableFields } from './academicSemester.constants';
 import { IAcademicSemesterFiltersFields } from './academicSemester.interface';
 
@@ -14,11 +14,12 @@ const create = async (data: AcademicSemester): Promise<AcademicSemester> => {
   return result;
 };
 
-const readAll = async (
+const readMultiple = async (
   filters: IAcademicSemesterFiltersFields,
   options: IPaginationOptions
 ): Promise<IGenericResponse<AcademicSemester[]>> => {
-  const { page, limit, skip } = paginationHelpers.calculatePagination(options);
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(options);
   const { searchTerm, ...filtersData } = filters;
 
   const andConditions = [];
@@ -58,6 +59,7 @@ const readAll = async (
     where: whereConditions,
     skip,
     take: limit,
+    orderBy: { [sortBy]: sortOrder },
   });
   const total = await prisma.academicSemester.count({
     where: whereConditions,
@@ -71,4 +73,12 @@ const readAll = async (
     data: result,
   };
 };
-export const AcademicSemesterService = { create, readAll };
+
+const readSingle = async (id: string): Promise<AcademicSemester | null> => {
+  const result = await prisma.academicSemester.findUnique({
+    where: { id },
+  });
+  return result;
+};
+
+export const AcademicSemesterService = { create, readMultiple, readSingle };
