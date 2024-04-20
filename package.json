@@ -10,8 +10,9 @@
     "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "prettier:fix": "prettier --write .",
     "lint-prettier": "yarn lint:check && yarn prettier:check",
-    "mgd": "npx prisma migrate dev",
-    "ps": "npx prisma studio",
+    "pmd": "npx prisma migrate dev",
+    "psg": "npx prisma studio",
+    "pcg": "npx prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "SHAHRIAR AHMED",
