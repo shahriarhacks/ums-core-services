@@ -35,4 +35,19 @@ const readMultiple = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const AcademicDepartmentController = { create, readMultiple };
+const readSingle = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AcademicDepartmentService.readSingle(id);
+  sendResponse<AcademicDepartment>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic department retrieve success!!',
+    data: result,
+  });
+});
+
+export const AcademicDepartmentController = {
+  create,
+  readMultiple,
+  readSingle,
+};
