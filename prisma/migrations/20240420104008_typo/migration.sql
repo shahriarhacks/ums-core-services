@@ -43,13 +43,14 @@ CREATE TABLE "students" (
     "profileImage" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "contactNo" TEXT NOT NULL,
+    "dateOfBirth" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "bloodGroup" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "academicSemesterId" TEXT NOT NULL,
     "academicFacultyId" TEXT NOT NULL,
-    "academicDepertmentId" TEXT NOT NULL,
+    "academicDepartmentId" TEXT NOT NULL,
 
     CONSTRAINT "students_pkey" PRIMARY KEY ("id")
 );
@@ -64,16 +65,29 @@ CREATE TABLE "faculties" (
     "profileImage" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "contactNo" TEXT NOT NULL,
+    "dateOfBirth" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "bloodGroup" TEXT NOT NULL,
     "designation" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "academicFacultyId" TEXT NOT NULL,
-    "academicDepaertmentId" TEXT NOT NULL,
+    "academicDepartmentId" TEXT NOT NULL,
 
     CONSTRAINT "faculties_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "students_email_key" ON "students"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "students_contactNo_key" ON "students"("contactNo");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "faculties_email_key" ON "faculties"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "faculties_contactNo_key" ON "faculties"("contactNo");
 
 -- AddForeignKey
 ALTER TABLE "academic_depertments" ADD CONSTRAINT "academic_depertments_academicFacultyId_fkey" FOREIGN KEY ("academicFacultyId") REFERENCES "academic_faculties"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -85,10 +99,10 @@ ALTER TABLE "students" ADD CONSTRAINT "students_academicSemesterId_fkey" FOREIGN
 ALTER TABLE "students" ADD CONSTRAINT "students_academicFacultyId_fkey" FOREIGN KEY ("academicFacultyId") REFERENCES "academic_faculties"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "students" ADD CONSTRAINT "students_academicDepertmentId_fkey" FOREIGN KEY ("academicDepertmentId") REFERENCES "academic_depertments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "students" ADD CONSTRAINT "students_academicDepartmentId_fkey" FOREIGN KEY ("academicDepartmentId") REFERENCES "academic_depertments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "faculties" ADD CONSTRAINT "faculties_academicFacultyId_fkey" FOREIGN KEY ("academicFacultyId") REFERENCES "academic_faculties"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "faculties" ADD CONSTRAINT "faculties_academicDepaertmentId_fkey" FOREIGN KEY ("academicDepaertmentId") REFERENCES "academic_depertments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "faculties" ADD CONSTRAINT "faculties_academicDepartmentId_fkey" FOREIGN KEY ("academicDepartmentId") REFERENCES "academic_depertments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

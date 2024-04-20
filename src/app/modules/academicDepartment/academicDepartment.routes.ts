@@ -13,4 +13,6 @@ router.post(
   AcademicDepartmentController.create
 );
 
+router.get('/:id', AcademicDepartmentController.readSingle);
+
 export const AcademicDepartmentRouter = router;

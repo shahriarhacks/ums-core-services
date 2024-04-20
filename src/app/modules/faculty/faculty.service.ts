@@ -1,38 +1,39 @@
-import {
-  AcademicDepartment,
-  Prisma,
-  AcademicDepartment as acd,
-} from '@prisma/client';
+import { Faculty, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { academicDepartmentSearchableFields } from './academicDepartment.constants';
-import { IAcademicDepartmentFilterRequest } from './academicFaculty.interface';
+import { facultySearchableFields } from './faculty.constants';
+import { IFacultyFilterRequest } from './faculty.interface';
 
-const create = async (data: acd): Promise<acd> => {
-  const result = await prisma.academicDepartment.create({
+const create = async (data: Faculty): Promise<Faculty> => {
+  const result = await prisma.faculty.create({
     data,
     include: {
       academicFaculty: true,
+      academicDepartment: true,
+      // academicDepartment: {
+      //   include: { academicFaculty: true },
+      // },
     },
   });
   return result;
 };
 
 const readMultiple = async (
-  filters: IAcademicDepartmentFilterRequest,
+  filters: IFacultyFilterRequest,
   options: IPaginationOptions
-): Promise<IGenericResponse<AcademicDepartment[]>> => {
+): Promise<IGenericResponse<Faculty[]>> => {
   const { searchTerm, ...filtersData } = filters;
   const { limit, page, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(options);
 
   const andConditions = [];
 
+  // Search Implement
   if (searchTerm) {
     andConditions.push({
-      OR: academicDepartmentSearchableFields.map(field => ({
+      OR: facultySearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',
@@ -40,7 +41,7 @@ const readMultiple = async (
       })),
     });
   }
-
+  // Filters Implement
   if (Object.keys(filtersData).length > 0) {
     andConditions.push({
       AND: Object.entries(filtersData).map(([field, value]) => ({
@@ -49,41 +50,38 @@ const readMultiple = async (
     });
   }
 
-  const whereConditions: Prisma.AcademicDepartmentWhereInput =
+  const whereConditions: Prisma.FacultyWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
-
-  const total = await prisma.academicDepartment.count({
-    where: whereConditions,
-  });
-
-  const result = await prisma.academicDepartment.findMany({
+  const result = await prisma.faculty.findMany({
     where: whereConditions,
     skip,
     take: limit,
     orderBy: { [sortBy]: sortOrder },
     include: {
+      academicDepartment: true,
       academicFaculty: true,
     },
   });
-
+  const total = await prisma.faculty.count({
+    where: whereConditions,
+  });
   return {
     meta: {
-      page,
       limit,
+      page,
       total,
     },
     data: result,
   };
 };
 
-const readSingle = async (id: string): Promise<AcademicDepartment | null> => {
-  const result = await prisma.academicDepartment.findUnique({
-    where: { id },
-    include: {
-      academicFaculty: true,
+const readSingle = async (id: string): Promise<Faculty | null> => {
+  const result = await prisma.faculty.findUnique({
+    where: {
+      id,
     },
   });
   return result;
 };
 
-export const AcademicDepartmentService = { create, readMultiple, readSingle };
+export const FacultyService = { create, readMultiple, readSingle };

@@ -14,3 +14,15 @@ export type IGenericErrorResponse = {
   message: string;
   errorMessages: IGenericErrorMessage[];
 };
+
+export type IBloodGroup =
+  | 'A+'
+  | 'A-'
+  | 'B+'
+  | 'B-'
+  | 'AB+'
+  | 'AB-'
+  | 'O+'
+  | 'O-';
+
+export type IGenderType = 'male' | 'female' | 'others' | 'not to say';
