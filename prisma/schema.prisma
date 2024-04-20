@@ -32,14 +32,14 @@ model AcademicFaculty {
   title               String
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
-  academicDepertments AcademicDepertment[]
+  academicDepertments AcademicDepartment[]
   students            Student[]
   faculties           Faculty[]
 
   @@map("academic_faculties")
 }
 
-model AcademicDepertment {
+model AcademicDepartment {
   id                String          @id @default(uuid())
   title             String
   createdAt         DateTime        @default(now())
@@ -73,7 +73,7 @@ model Student {
   // Relations
   academicSemester   AcademicSemester   @relation(fields: [academicSemesterId], references: [id])
   academicFaculty    AcademicFaculty    @relation(fields: [academicFacultyId], references: [id])
-  academicDepertment AcademicDepertment @relation(fields: [academicDepertmentId], references: [id])
+  academicDepertment AcademicDepartment @relation(fields: [academicDepertmentId], references: [id])
 
   @@map("students")
 }
@@ -98,7 +98,7 @@ model Faculty {
 
   // Relations
   academicFaculty    AcademicFaculty    @relation(fields: [academicFacultyId], references: [id])
-  academicDepertment AcademicDepertment @relation(fields: [academicDepaertmentId], references: [id])
+  academicDepertment AcademicDepartment @relation(fields: [academicDepaertmentId], references: [id])
 
   @@map("faculties")
 }
