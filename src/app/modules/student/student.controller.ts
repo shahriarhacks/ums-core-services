@@ -42,4 +42,33 @@ const readSingle = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const StudentController = { create, readMultiple, readSingle };
+const update = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await StudentService.update(id, payload);
+  sendResponse<Student>(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Student updated success!!',
+    data: result,
+  });
+});
+
+const deleting = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await StudentService.deleting(id);
+  sendResponse<Student>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student deletion success!!',
+    data: result,
+  });
+});
+
+export const StudentController = {
+  create,
+  readMultiple,
+  readSingle,
+  update,
+  deleting,
+};
