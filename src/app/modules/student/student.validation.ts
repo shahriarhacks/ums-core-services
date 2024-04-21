@@ -32,4 +32,22 @@ const create = z.object({
   }),
 });
 
-export const StudentValidation = { create };
+const update = z.object({
+  body: z.object({
+    studentId: z.string().optional(),
+    firstName: z.string().optional(),
+    middleName: z.string().optional(),
+    lastName: z.string().optional(),
+    profileImage: z.string().optional(),
+    email: z.string().optional(),
+    contactNo: z.string().optional(),
+    dateOfBirth: z.string().optional(),
+    gender: z.enum([...gender] as [string, ...string[]]).optional(),
+    bloodGroup: z.enum([...bloodGroups] as [string, ...string[]]).optional(),
+    academicSemesterId: z.string().optional(),
+    academicFacultyId: z.string().optional(),
+    academicDepartmentId: z.string().optional(),
+  }),
+});
+
+export const StudentValidation = { create, update };
