@@ -74,4 +74,28 @@ const readSingle = async (id: string): Promise<AcademicFaculty | null> => {
   return result;
 };
 
-export const AcademicFacultyService = { create, readMultiple, readSingle };
+const update = async (
+  id: string,
+  payload: Partial<AcademicFaculty>
+): Promise<AcademicFaculty> => {
+  const result = await prisma.academicFaculty.update({
+    where: { id },
+    data: payload,
+  });
+  return result;
+};
+
+const deleting = async (id: string): Promise<AcademicFaculty> => {
+  const result = await prisma.academicFaculty.delete({
+    where: { id },
+  });
+  return result;
+};
+
+export const AcademicFacultyService = {
+  create,
+  readMultiple,
+  readSingle,
+  update,
+  deleting,
+};

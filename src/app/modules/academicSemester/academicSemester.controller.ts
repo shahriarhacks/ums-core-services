@@ -21,8 +21,7 @@ const create = catchAsync(async (req: Request, res: Response) => {
 const readMultiple = catchAsync(async (req: Request, res: Response) => {
   const filters = pick({ ...req.query }, academicSemesterFilterableFields);
   const pgOptions = pick({ ...req.query }, paginationFields);
-  // console.log('filters: ', filters);
-  // console.log('Pagination Options: ', pgOptions);
+
   const result = await AcademicSemesterService.readMultiple(filters, pgOptions);
   sendResponse<AcademicSemester[]>(res, {
     statusCode: httpStatus.OK,
@@ -44,4 +43,32 @@ const readSingle = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const AcademicSemesterController = { create, readMultiple, readSingle };
+const update = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const data = req.body;
+  const result = await AcademicSemesterService.update(id, { ...data });
+  sendResponse<AcademicSemester>(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Academic Semester updated success!!',
+    data: result,
+  });
+});
+
+const deleting = catchAsync(async (req: Request, res: Response) => {
+  const result = await AcademicSemesterService.deleting(req.params.id);
+  sendResponse<AcademicSemester>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Semester deleting success!!',
+    data: result,
+  });
+});
+
+export const AcademicSemesterController = {
+  create,
+  readMultiple,
+  readSingle,
+  update,
+  deleting,
+};
