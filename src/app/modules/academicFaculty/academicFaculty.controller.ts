@@ -45,4 +45,32 @@ const readSingle = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const AcademicFacultyController = { create, readMultiple, readSingle };
+const update = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const data = req.body;
+  const result = await AcademicFacultyService.update(id, { ...data });
+  sendResponse<AcademicFaculty>(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Academic Faculty updated success!!',
+    data: result,
+  });
+});
+
+const deleting = catchAsync(async (req: Request, res: Response) => {
+  const result = await AcademicFacultyService.deleting(req.params.id);
+  sendResponse<AcademicFaculty>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Faculty deleting success!!',
+    data: result,
+  });
+});
+
+export const AcademicFacultyController = {
+  create,
+  readMultiple,
+  readSingle,
+  update,
+  deleting,
+};
